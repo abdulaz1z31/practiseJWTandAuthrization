@@ -1,2 +1,6 @@
 export * from "./login.schema.js"
 export * from "./register.schema.js"
+export * from "./admin.schema.js"
+export * from "./author.schema.js"
+export * from "./cartegory.schema.js"
+export * from "./user.schema.js"

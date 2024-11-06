@@ -10,7 +10,20 @@ export const getAllCartegories = async (req, res, next) => {
   }
 };
 
+export const createCategory = async (req, res, next) => {
+  try {
+    const { name, description} = req.body;
 
+    const newCategory = await Category.create({ name, description });
+
+    res.status(201).json({
+      message: "Aded category successfully",
+      category: newCategory,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getCartegoryById = async (req, res, next) => {
   try {

@@ -1,5 +1,4 @@
-import {Author} from "../models/index.model.js";
-
+import { Author } from "../models/index.model.js";
 
 export const getAllAuthors = async (req, res, next) => {
   try {
@@ -10,7 +9,20 @@ export const getAllAuthors = async (req, res, next) => {
   }
 };
 
+export const createAuthor = async (req, res, next) => {
+  try {
+    const { name, email, password, bio, age } = req.body;
 
+    const newAuthor = await Author.create({ name, email, password, bio, age });
+
+    res.status(201).json({
+      message: "Aded author successfully",
+      author: newAuthor,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getAuthorById = async (req, res, next) => {
   try {
