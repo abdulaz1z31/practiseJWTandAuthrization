@@ -1,5 +1,5 @@
 import{ Author }from '../models/index.model.js';
-
+import { createTokens } from '../helpers/jwt.js';
 export const registerAuthor = async (req, res, next) => {
     try {
         const { name, email, password } = req.body;
@@ -17,16 +17,21 @@ export const registerAuthor = async (req, res, next) => {
 
 export const loginAuthor = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
+        const { name, password } = req.body;
 
-        const author = await Author.findOne({ username, password });
+        const author = await Author.findOne({ name, password });
         if (!author) {
-            return res.status(401).json({ message: "Username or passwrod is invalid" });
+            return res.status(401).json({ message: "name or passwrod is invalid" });
         }
-
+        const payload = {
+            name: author.name,
+            email:author.email
+        }
+        
+        const token = createTokens(payload)
         res.status(200).json({
             message: "Logged in successfully",
-            author
+            token
         });
     } catch (err) {
         next(err);

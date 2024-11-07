@@ -1,5 +1,5 @@
-import { User, Category, Admin } from "../models/index.model.js";
-
+import { User, Category, Admin, SuperAdmin } from "../models/index.model.js";
+import { createTokens } from "../helpers/jwt.js";
 export const createUser = async (req, res, next) => {
   try {
     const { name, email, password, age } = req.body;
@@ -111,5 +111,29 @@ export const updateAdminsById = async (req, res, next) => {
     res.status(201).send(admin);
   } catch (err) {
     next(err);
+  }
+};
+
+
+export const loginSuperAdmin = async (req, res, next) => {
+  try {
+      const { name, password, email } = req.body;
+
+      const superAdmin = await SuperAdmin.findOne({ name, password, email });
+      if (!superAdmin) {
+          return res.status(401).json({ message: "Name or passwrod is invalid" });
+      }
+      const payload = {
+          name:superAdmin.name,
+          email:superAdmin.email
+      }
+      
+      const token = createTokens(payload)
+      res.status(200).json({
+          message: "Logged in successfully",
+          token
+      });
+  } catch (err) {
+      next(err);
   }
 };

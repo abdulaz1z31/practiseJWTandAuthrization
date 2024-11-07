@@ -1,10 +1,13 @@
-export const validationMiddleware = (schema) =>{
+export const validationMiddleware = (schema) => {
     return (req, res, next) => {
-        try {
-            schema.parse(req.body)
-            next()
-        } catch (err) {
-            next(err)
+        const { error } = schema.validate(req.body);
+        if (error) {
+            res.status(400).json({
+                error: "validationError",
+                details: error.details.map(detail => detail.message)
+            });
+        } else {
+            next();
         }
-    }
-}
+    };
+};
